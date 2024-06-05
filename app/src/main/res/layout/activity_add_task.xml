@@ -5,15 +5,15 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <Button
-        android:id="@+id/buttonAddNewTask"
+    <EditText
+        android:id="@+id/descTaskEt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add New Task" />
+        android:hint="Task Description" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewTasks"
+    <Button
+        android:id="@+id/addNewTaskBt"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp" />
+        android:layout_height="wrap_content"
+        android:text="Add Task" />
 </LinearLayout>
