@@ -4,6 +4,7 @@ import alexandre.cavaleiro.tasklist.R
 import alexandre.cavaleiro.tasklist.adapter.TaskAdapter
 import alexandre.cavaleiro.tasklist.databinding.ActivityMainBinding
 import alexandre.cavaleiro.tasklist.model.Constant.EXTRA_TASK
+import alexandre.cavaleiro.tasklist.model.Constant.VIEW_TASK
 import alexandre.cavaleiro.tasklist.model.Task
 import android.content.Intent
 import android.os.Bundle
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(amb.root)
-        fillTasks()
+        //fillTasks()
 
         setSupportActionBar(amb.toolbarIn.toolbar)
         supportActionBar?.subtitle="Tasks"
@@ -58,6 +59,14 @@ class MainActivity : AppCompatActivity() {
                     taskAdapter.notifyDataSetChanged()
                 }
             }
+        }
+
+        amb.taskslv.setOnItemClickListener { parent, view, position, id ->
+            val task = taskList[position]
+            val viewTaskIntent = Intent(this, AddTaskActivity::class.java)
+            viewTaskIntent.putExtra(EXTRA_TASK, task)
+            viewTaskIntent.putExtra(VIEW_TASK, true)
+            startActivity(viewTaskIntent)
         }
 
         registerForContextMenu(amb.taskslv)
@@ -111,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+/*
     private fun fillTasks(){
         for (i in 1..50){
             taskList.add(
@@ -123,5 +132,5 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
-
+*/
 }
