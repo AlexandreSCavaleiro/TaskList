@@ -41,6 +41,7 @@ class TaskAdapter(context: Context, private val taskList: MutableList<Task>
         holder.descricaoTv.setText(task.descricao)
         holder.completeCb.setText(flag)
 
+ //falta algo
 
         return taskTileView
     }

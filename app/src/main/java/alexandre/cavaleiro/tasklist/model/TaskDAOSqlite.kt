@@ -4,6 +4,7 @@ import alexandre.cavaleiro.tasklist.R
 import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
@@ -18,8 +19,8 @@ class TaskDAOSqlite(context: Context):TaskDAO {
         private const val CREATE_TASK_TABLE_STATEMENT =
             "CREATE TABLE IF NOT EXISTS $TASK_TABLE (" +
                     "$ID_COLUMN INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                    "$DESC_COLUMN TEXT NOT NULL, "+
-                    "$COMPLETE_COLUMN BOOLEAN NOT NULL, "+
+                    "$DESC_COLUMN TEXT NOT NULL, " +
+                    "$COMPLETE_COLUMN BOOLEAN NOT NULL " +
                     ");"
     }
 
@@ -34,29 +35,62 @@ class TaskDAOSqlite(context: Context):TaskDAO {
         }
     }
 
-    override fun createTask(task: Task): Int {
-        val cv = ContentValues()
-        cv.put(DESC_COLUMN, task.descricao)
-        cv.put(COMPLETE_COLUMN, task.completa)
+    override fun createTask(task: Task) = taskSqliteDatabase.insert(
+        TASK_TABLE,
+        null,
+        task.toContentValues()
+    ).toInt()
 
-        return taskSqliteDatabase.insert(TASK_TABLE, null, cv).toInt()
-    }
 
-    override fun retrieveTask(id: Int): Task {
-        TODO("Not yet implemented")
+    override fun retrieveTask(id: Int): Task? {
+        val cursor = taskSqliteDatabase.rawQuery(
+            "SELECT * FROM $TASK_TABLE WHERE $ID_COLUMN = ?",
+            arrayOf(id.toString())
+        )
+        val task = if (cursor.moveToFirst()) cursor.rowToTask() else null
+        cursor.close()
+        return task
     }
 
     override fun retrieveTasks(): MutableList<Task> {
-        TODO("Not yet implemented")
+        val taskList = mutableListOf<Task>()
+        val cursor = taskSqliteDatabase.rawQuery(
+            "SELECT * FROM $TASK_TABLE ORDER BY $DESC_COLUMN",
+            null
+        )
+
+        while (cursor.moveToNext()){
+            taskList.add(cursor.rowToTask())
+        }
+        cursor.close()
+        return taskList
     }
 
-    override fun updateTask(task: Task): Int {
-        TODO("Not yet implemented")
+    override fun updateTask(task: Task): Int = taskSqliteDatabase.update(
+        TASK_TABLE,
+        task.toContentValues(),
+        "$ID_COLUMN = ?",
+        arrayOf(task.id.toString())
+    )
+
+    override fun deleteTask(id: Int): Int =taskSqliteDatabase.delete(
+        TASK_TABLE,
+        "$ID_COLUMN = ?",
+        arrayOf(id.toString())
+
+    )
+
+    private fun Cursor.rowToTask(): Task {
+        val complete = getInt(getColumnIndexOrThrow(COMPLETE_COLUMN)) != 0
+        return Task(
+            getInt(getColumnIndexOrThrow(ID_COLUMN)),
+            getString(getColumnIndexOrThrow(DESC_COLUMN)),
+            complete
+        )
     }
-
-    override fun deleteTask(id: Int): Int {
-        TODO("Not yet implemented")
+    private fun Task.toContentValues(): ContentValues = with(ContentValues()){
+        put(DESC_COLUMN, descricao)
+        put(COMPLETE_COLUMN, completa)
+        this
     }
-
-
 }

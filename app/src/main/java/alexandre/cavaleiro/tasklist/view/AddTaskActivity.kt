@@ -1,13 +1,13 @@
 package alexandre.cavaleiro.tasklist.view
 import alexandre.cavaleiro.tasklist.databinding.ActivityAddTaskBinding
 import alexandre.cavaleiro.tasklist.model.Constant.EXTRA_TASK
+import alexandre.cavaleiro.tasklist.model.Constant.INVALID_CONTACT_ID
 import alexandre.cavaleiro.tasklist.model.Constant.VIEW_TASK
 import alexandre.cavaleiro.tasklist.model.Task
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import java.util.Random
 
 class AddTaskActivity : AppCompatActivity() {
 
@@ -24,12 +24,12 @@ class AddTaskActivity : AppCompatActivity() {
 
         val receivedTask = intent.getParcelableExtra<Task>(EXTRA_TASK)
         receivedTask?.let { _receivedTask ->
-            val viewTask = intent.getBooleanExtra(VIEW_TASK,false)
+            val viewTask: Boolean = intent.getBooleanExtra(VIEW_TASK,false)
             with(atab) {
                 if (viewTask) {
                     descTaskEt.isEnabled = false
                     completeCb.isEnabled = false
-                    addNewTaskBt.isVisible = false
+                    addNewTaskBt.visibility= View.GONE
                 }
                 descTaskEt.setText(_receivedTask.descricao)
                 completeCb.isChecked = _receivedTask.completa
@@ -40,8 +40,8 @@ class AddTaskActivity : AppCompatActivity() {
         with(atab){
             addNewTaskBt.setOnClickListener{
 
-                val task = Task(
-                    id = receivedTask?.id?:generateId(),
+                val task: Task = Task(
+                    id = receivedTask?.id?: INVALID_CONTACT_ID,
                     descricao = descTaskEt.text.toString(),
                     completa = completeCb.isChecked
                 )
@@ -53,5 +53,5 @@ class AddTaskActivity : AppCompatActivity() {
             }
         }
     }
-    private fun generateId(): Int = Random(System.currentTimeMillis()).nextInt()
+    //private fun generateId(): Int = Random(System.currentTimeMillis()).nextInt()
 }

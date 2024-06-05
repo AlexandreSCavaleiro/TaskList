@@ -2,6 +2,7 @@ package alexandre.cavaleiro.tasklist.view
 
 import alexandre.cavaleiro.tasklist.R
 import alexandre.cavaleiro.tasklist.adapter.TaskAdapter
+import alexandre.cavaleiro.tasklist.adapter.TaskController
 import alexandre.cavaleiro.tasklist.databinding.ActivityMainBinding
 import alexandre.cavaleiro.tasklist.model.Constant.EXTRA_TASK
 import alexandre.cavaleiro.tasklist.model.Constant.VIEW_TASK
@@ -27,8 +28,15 @@ class MainActivity : AppCompatActivity() {
     //ARL
     private lateinit var carl: ActivityResultLauncher<Intent>
 
+    //Controller
+    private val taskController: TaskController by lazy {
+        TaskController(this)
+    }
+
     //Data Source
-    private val taskList: MutableList<Task> = mutableListOf()
+    private val taskList: MutableList<Task> by lazy {
+        taskController.getTasks()
+    }
 
     //Adapter
     private val taskAdapter: TaskAdapter by lazy {
@@ -53,9 +61,17 @@ class MainActivity : AppCompatActivity() {
                     if (taskList.any{ it.id == task.id }){
                         val position = taskList.indexOfFirst { it.id == task.id }
                         taskList[position] = _task
+                        taskController.editTask(_task)
                     }else {
-                        taskList.add(_task)
+                        val newId = taskController.insertTask(_task)
+                        val newTask = Task(
+                            newId,
+                            _task.descricao,
+                            _task.completa
+                        )
+                        taskList.add(newTask)
                     }
+                    taskList.sortBy {it.descricao}
                     taskAdapter.notifyDataSetChanged()
                 }
             }
@@ -64,8 +80,9 @@ class MainActivity : AppCompatActivity() {
         amb.taskslv.setOnItemClickListener { parent, view, position, id ->
             val task = taskList[position]
             val viewTaskIntent = Intent(this, AddTaskActivity::class.java)
-            viewTaskIntent.putExtra(EXTRA_TASK, task)
-            viewTaskIntent.putExtra(VIEW_TASK, true)
+                .putExtra(EXTRA_TASK, task)
+                .putExtra(VIEW_TASK, true)
+
             startActivity(viewTaskIntent)
         }
 
@@ -82,17 +99,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val position = (item.menuInfo as AdapterContextMenuInfo).position
+        val task = taskList[position]
+
         return when (item.itemId){
             R.id.removeTaskMi -> {
+                taskController.removeTask(task.id)
                 taskList.removeAt(position)
                 taskAdapter.notifyDataSetChanged()
                 Toast.makeText(this,"Removido", Toast.LENGTH_SHORT).show()
                 true
             }
             R.id.editTaskMi -> {
-                val task = taskList[position]
+                val taskForEdit = taskList[position]
                 val editTaskIntent = Intent(this, AddTaskActivity::class.java)
-                editTaskIntent.putExtra(EXTRA_TASK, task)
+                editTaskIntent.putExtra(EXTRA_TASK, taskForEdit)
                 carl.launch(editTaskIntent)
                 true
             }
