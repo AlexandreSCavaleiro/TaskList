@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/removeTaskMi"
+        android:title="@string/apagar_task"/>
+    <item
+        android:id="@+id/editTaskMi"
+        android:title="@string/editar_task"/>
+
+</menu>

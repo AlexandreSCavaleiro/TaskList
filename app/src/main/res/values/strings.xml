@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">TaskList</string>
     <string name="add_task">Add Task</string>
+    <string name="apagar_task">Apagar Task</string>
+    <string name="editar_task">Editar Task</string>
 </resources>

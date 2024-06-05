@@ -19,13 +19,21 @@ class AddTaskActivity : AppCompatActivity() {
         setSupportActionBar(atab.toolbarIn.toolbar)
         supportActionBar?.subtitle="Tasks"
 
+        val receivedTask = intent.getParcelableExtra<Task>(EXTRA_TASK)
+        receivedTask?.let { _receivedTask ->
+            with(atab){
+                descTaskEt.setText(_receivedTask.descricao)
+                completeCb.isChecked = _receivedTask.completa
+            }
+        }
+
         setContentView(atab.root)
         with(atab){
 
             addNewTaskBt.setOnClickListener{
 
                 val task: Task = Task(
-                    id = generateId(),
+                    id = receivedTask?.id?:generateId(),
                     descricao = descTaskEt.text.toString(),
                     completa = completeCb.isChecked
                 )
