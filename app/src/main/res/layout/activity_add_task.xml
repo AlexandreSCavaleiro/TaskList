@@ -11,9 +11,16 @@
         android:layout_height="wrap_content"
         android:hint="Task Description" />
 
+    <CheckBox
+        android:id="@+id/completeCb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Concluido."/>
+
     <Button
         android:id="@+id/addNewTaskBt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Task" />
+
 </LinearLayout>
