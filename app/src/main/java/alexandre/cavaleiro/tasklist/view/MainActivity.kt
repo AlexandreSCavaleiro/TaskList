@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(amb.root)
         fillTasks()
+
         amb.taskslv.adapter = taskAdapter
 
         carl = registerForActivityResult(
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*
+
     private fun fillTasks(){
         for (i in 1..50){
             taskList.add(
@@ -81,5 +82,5 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
-    */
+
 }

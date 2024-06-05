@@ -18,6 +18,7 @@ class AddTaskActivity : AppCompatActivity() {
 
         setContentView(atab.root)
         with(atab){
+
             addNewTaskBt.setOnClickListener{
 
                 val task: Task = Task(
