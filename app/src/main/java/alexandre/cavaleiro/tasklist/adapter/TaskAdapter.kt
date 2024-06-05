@@ -1,6 +1,7 @@
 package alexandre.cavaleiro.tasklist.adapter
 
 import alexandre.cavaleiro.tasklist.R
+import alexandre.cavaleiro.tasklist.databinding.TileTaskBinding
 import alexandre.cavaleiro.tasklist.model.Task
 import android.content.Context
 import android.content.Context.LAYOUT_INFLATER_SERVICE
@@ -17,22 +18,32 @@ class TaskAdapter(context: Context, private val taskList: MutableList<Task>
         var flag = "TODO"
 
         if (task.completa){
-            flag = "completa"
+            flag = "COMPLETA"
         }else{
-            flag = "Todo"
+            flag = "TODO"
         }
 
-        var contactTileView = convertView
-        if(contactTileView == null){
-            contactTileView = (context.getSystemService(LAYOUT_INFLATER_SERVICE) as
-                    LayoutInflater).inflate(R.layout.tile_task, parent, false)
+        var ttb: TileTaskBinding? = null
+
+        var taskTileView = convertView
+        if (taskTileView == null) {
+            ttb = TileTaskBinding.inflate(
+                context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater,
+                parent, false
+            )
+            taskTileView = ttb.root
+
+            val tileTaskHolder = TileTaskHolder(ttb.descricaoTV, ttb.completaTV)
+            taskTileView.tag = tileTaskHolder
         }
 
+        val holder = taskTileView.tag as TileTaskHolder
+        holder.descricaoTv.setText(task.descricao)
+        holder.completeCb.setText(flag)
 
-        contactTileView!!.findViewById<TextView>(R.id.descTaskEt).setText(task.descricao)
-        contactTileView!!.findViewById<TextView>(R.id.completaTV).setText(flag)
 
-
-        return contactTileView
+        return taskTileView
     }
+
+    private class TileTaskHolder(val descricaoTv: TextView, val completeCb: TextView)
 }

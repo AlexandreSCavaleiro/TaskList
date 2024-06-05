@@ -16,6 +16,9 @@ class AddTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setSupportActionBar(atab.toolbarIn.toolbar)
+        supportActionBar?.subtitle="Tasks"
+
         setContentView(atab.root)
         with(atab){
 
