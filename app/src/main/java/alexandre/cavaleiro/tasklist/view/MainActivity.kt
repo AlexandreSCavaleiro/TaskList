@@ -4,6 +4,7 @@ import alexandre.cavaleiro.tasklist.R
 import alexandre.cavaleiro.tasklist.adapter.TaskAdapter
 import alexandre.cavaleiro.tasklist.adapter.TaskController
 import alexandre.cavaleiro.tasklist.databinding.ActivityMainBinding
+import alexandre.cavaleiro.tasklist.model.Constant.EDIT_TASK
 import alexandre.cavaleiro.tasklist.model.Constant.EXTRA_TASK
 import alexandre.cavaleiro.tasklist.model.Constant.VIEW_TASK
 import alexandre.cavaleiro.tasklist.model.Task
@@ -14,7 +15,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView.AdapterContextMenuInfo
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -102,17 +102,17 @@ class MainActivity : AppCompatActivity() {
         val task = taskList[position]
 
         return when (item.itemId){
-            R.id.removeTaskMi -> {
-                taskController.removeTask(task.id)
-                taskList.removeAt(position)
-                taskAdapter.notifyDataSetChanged()
-                Toast.makeText(this,"Removido", Toast.LENGTH_SHORT).show()
-                true
-            }
+//            R.id.removeTaskMi -> {
+//                taskController.removeTask(task.id)
+//                taskList.removeAt(position)
+//                taskAdapter.notifyDataSetChanged()
+//                Toast.makeText(this,"Removido", Toast.LENGTH_SHORT).show()
+//                true
+//            }
             R.id.editTaskMi -> {
                 val taskForEdit = taskList[position]
                 val editTaskIntent = Intent(this, AddTaskActivity::class.java)
-                editTaskIntent.putExtra(EXTRA_TASK, taskForEdit)
+                editTaskIntent.putExtra(EXTRA_TASK, taskForEdit).putExtra(EDIT_TASK, true)
                 carl.launch(editTaskIntent)
                 true
             }

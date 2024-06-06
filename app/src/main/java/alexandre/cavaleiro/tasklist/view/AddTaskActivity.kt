@@ -1,5 +1,6 @@
 package alexandre.cavaleiro.tasklist.view
 import alexandre.cavaleiro.tasklist.databinding.ActivityAddTaskBinding
+import alexandre.cavaleiro.tasklist.model.Constant.EDIT_TASK
 import alexandre.cavaleiro.tasklist.model.Constant.EXTRA_TASK
 import alexandre.cavaleiro.tasklist.model.Constant.INVALID_CONTACT_ID
 import alexandre.cavaleiro.tasklist.model.Constant.VIEW_TASK
@@ -25,11 +26,15 @@ class AddTaskActivity : AppCompatActivity() {
         val receivedTask = intent.getParcelableExtra<Task>(EXTRA_TASK)
         receivedTask?.let { _receivedTask ->
             val viewTask: Boolean = intent.getBooleanExtra(VIEW_TASK,false)
+            val editTask: Boolean = intent.getBooleanExtra(EDIT_TASK, false)
             with(atab) {
                 if (viewTask) {
                     descTaskEt.isEnabled = false
                     completeCb.isEnabled = false
                     addNewTaskBt.visibility= View.GONE
+                }else if (editTask){
+                    descTaskEt.isEnabled = false
+                    addNewTaskBt.text = "Editar Task"
                 }
                 descTaskEt.setText(_receivedTask.descricao)
                 completeCb.isChecked = _receivedTask.completa

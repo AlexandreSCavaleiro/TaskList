@@ -72,13 +72,13 @@ class TaskDAOSqlite(context: Context):TaskDAO {
         "$ID_COLUMN = ?",
         arrayOf(task.id.toString())
     )
-
-    override fun deleteTask(id: Int): Int =taskSqliteDatabase.delete(
-        TASK_TABLE,
-        "$ID_COLUMN = ?",
-        arrayOf(id.toString())
-
-    )
+//
+//    override fun deleteTask(id: Int): Int =taskSqliteDatabase.delete(
+//        TASK_TABLE,
+//        "$ID_COLUMN = ?",
+//        arrayOf(id.toString())
+//
+//    )
 
     private fun Cursor.rowToTask(): Task {
         val complete = getInt(getColumnIndexOrThrow(COMPLETE_COLUMN)) != 0
